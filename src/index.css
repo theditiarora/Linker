@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Chivo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,7 +6,12 @@
 
 body{
     font-family: 'Chivo';
-    overflow-x: hidden
+    overflow-x: hidden;
+    background: #1c1c1c;
+    background-image: url(./shapes.png);
+    background-size: cover;
+    background-repeat: repeat-y;
+    
 }
 
 @layer components  {
