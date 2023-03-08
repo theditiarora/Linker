@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Chivo&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    font-family: 'Chivo';
+    overflow-x: hidden
+}
+
+@layer components  {
+    .input-field {
+        @apply mt-5 bg-grey py-3 px-5 outline-none rounded-md placeholder:text-lightgrey 
+    }
+}
