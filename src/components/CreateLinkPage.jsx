@@ -1,11 +1,14 @@
 import React from 'react'
 import { useState } from "react";
 import Link from "./Link";
+import { useNavigate } from 'react-router-dom';
 
 const CreateLinkPage = () => {
+  const navigate = useNavigate()
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [links, setLinks] = useState([]);
+
 
   const addNewLink = () => {
     const id = Math.floor(Math.random() * 1000) + 1
@@ -21,9 +24,9 @@ const CreateLinkPage = () => {
   
   return (
     <div>
-        <div className="flex justify-between text-c-twenty">
+      <div className="flex justify-between text-c-twenty">
         <h1>Add a new link</h1>
-        <h1>Linker </h1>
+        <h1 className='cursor-pointer' onClick={() => navigate('/')}>Linker </h1>
       </div>
 
       <div className="w-2/3 ">
