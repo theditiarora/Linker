@@ -4,22 +4,25 @@ import { useState, useEffect } from "react";
 //firebase
 import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../Firebase";
+import { ErrorMsg } from './ErrorMsg';
 
 const Signup = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState({})
+  const [errorMsg, setErrorMsg] = useState(true)
 
   // sign up
   const handleSubmit = async () => {
 
     try {
-     await createUserWithEmailAndPassword(auth, email, password)
+    const user =  await createUserWithEmailAndPassword(auth, email, password)
      setEmail('')
      setPassword('')
+     console.log(user);
     }
     catch(error) {
-      console.log(error.message);
+      setErrorMsg(true)
     }
     
     navigate('/addLink')
@@ -40,7 +43,9 @@ const Signup = () => {
             <h1 className='cursor-pointer' onClick={() => navigate('/')}>Linker </h1>
         </div>
 
-        <label className='block text-c-eighteen mt-12'>Email Address</label>
+        <ErrorMsg />
+
+        <label className={`block text-c-eighteen mt-4 }`}>Email Address</label>
         <input 
           value={email} 
           onChange={e => setEmail(e.target.value)} 
