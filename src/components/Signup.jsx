@@ -18,9 +18,11 @@ const Signup = () => {
      setEmail('')
      setPassword('')
     }
-     catch(error) {
-     console.log(error.message);
+    catch(error) {
+      console.log(error.message);
     }
+    
+    navigate('/addLink')
     
    } 
   
@@ -29,11 +31,6 @@ const Signup = () => {
       setUser(currentUser)
     })
    }, [user])
- 
-
-  const handleClick = () => {
-    navigate('/addLink')
-  }
   
   const navigate = useNavigate()
   return (
