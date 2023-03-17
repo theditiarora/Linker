@@ -1,10 +1,15 @@
 import React from "react";
-import { LinkSimple, CaretDown, Trash } from "@phosphor-icons/react";
+import DeleteModal from "./DeleteModal";
+import { LinkSimple, CaretDown, TrashSimple, CopySimple } from "@phosphor-icons/react";
 import { useState } from "react";
 
-const Link = ({ links, onDelete }) => {
+ const Link = ({ links, onDelete }) => {
   const [toggle, setToggle] = useState(false);
+  const [modal, setModal] = useState(false)
 
+  const handleClick = () => {
+    setModal(true)
+  }
 
   const handleToggle = () => setToggle(!toggle);
 
@@ -16,29 +21,40 @@ const Link = ({ links, onDelete }) => {
         <div>
           <a target="_blank" href={links.url}> {links.title} </a>
 
-          <a className={`mt-3 text-pink ${toggle ? `block` : `hidden`}`} href={links.url}>{links.url}</a>
+          <a className={`mt-3 text-light-green ${toggle ? `block` : `hidden`}`} href={links.url}>{links.url}</a>
         </div>
       </div>
 
       <div className="flex gap-3">
         <CaretDown
             onClick={handleToggle}
-            className={`flex-shrink-0 cursor-pointe hover:bg-opacity-80 px-2 py-1 transition-all duration-200 rounded-md hover:bg-blue cursor-pointer ${toggle && `rotate-180`}`}
+            className={`flex-shrink-0 cursor-pointe px-2 py-1 transition-all duration-200 rounded-md hover:bg-white hover:bg-opacity-30 cursor-pointer ${toggle && `rotate-180`}`}
             size={36}
             color="#ffffff"
             weight="bold"
         />
 
-        <Trash 
-            className="flex-shrink-0 cursor-pointe hover:bg-opacity-80 px-2 py-1 transition-all duration-200 rounded-md hover:bg-green cursor-pointer" 
+        <TrashSimple 
+            className="flex-shrink-0 cursor-pointe px-2 py-1 transition-all duration-200 rounded-md hover:bg-white hover:bg-opacity-30 cursor-pointer" 
             size={36} 
             color="#ffffff" 
             weight="bold"
-            onClick={() => onDelete(links.id)}
+            onClick= {handleClick}
         />
+
+        <CopySimple 
+          className="flex-shrink-0 cursor-pointe px-2 py-1 transition-all duration-200 rounded-md hover:bg-white hover:bg-opacity-30 cursor-pointer" 
+          size={36} 
+          color="#ffffff" 
+          weight="bold"
+          onClick={() => {navigator.clipboard.writeText(links.url)}}
+        />
+
       </div>
+      { modal && <DeleteModal setModal={setModal} links={links} onDelete={onDelete} /> }
     </div>
   );
 };
 
-export default Link;
+export default Link
+

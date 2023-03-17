@@ -1,7 +1,40 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from "react";
+//firebase
+import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { auth } from "../Firebase";
 
 const Signup = () => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState({})
+
+  // sign up
+  const handleSubmit = async () => {
+
+    try {
+     await createUserWithEmailAndPassword(auth, email, password)
+     setEmail('')
+     setPassword('')
+    }
+     catch(error) {
+     console.log(error.message);
+    }
+    
+   } 
+  
+   useEffect(() => {
+    onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser)
+    })
+   }, [user])
+ 
+
+  const handleClick = () => {
+    navigate('/addLink')
+  }
+  
   const navigate = useNavigate()
   return (
     <div>
@@ -11,12 +44,23 @@ const Signup = () => {
         </div>
 
         <label className='block text-c-eighteen mt-12'>Email Address</label>
-        <input placeholder='example@gmail.com' className='input-field mt-3 w-2/4' type="text" />
+        <input 
+          value={email} 
+          onChange={e => setEmail(e.target.value)} 
+          placeholder='example@gmail.com' 
+          className='input-field mt-3 w-2/4' 
+          type="text" 
+        />
 
         <label className='block text-c-eighteen mt-8'>Password</label>
-        <input placeholder='······' className='input-field mt-3 w-2/4' type="password" />
-
-        <button onClick={() => navigate('/addLink')} className='block mt-8 py-2 px-12 text-white rounded-md bg-green hover:bg-opacity-70 transition-all duration-200'>Sign up</button>
+        <input 
+          value={password} 
+          onChange={e => setPassword(e.target.value)} 
+          placeholder='······' 
+          className='input-field mt-3 w-2/4' 
+          type="password" 
+        />
+        <button onClick={handleSubmit} className='block mt-8 py-2 px-12 text-white rounded-md bg-green hover:bg-opacity-70 transition-all duration-200'>Sign up</button>
 
         <p className="mt-8">Already have an account? <span onClick={() => navigate('/login')} className="text-green cursor-pointer">Log in</span></p>
 
