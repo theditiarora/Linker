@@ -13,6 +13,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState({});
   const [errorMsg, setErrorMsg] = useState(false);
+  const [imagelist, setImageList] = useState([])
   const [userimg, setUserImg] = useState(userImg);
 
   const navigate = useNavigate();
@@ -54,15 +55,17 @@ const Signup = () => {
   }
   
   // uploading image to firebase
+  const imageListRef = ref(storage, "images/")
   const uploadImg = (inp) => {
     if (inp == null) return console.log("null");
     
     const imageRef = ref(storage, `images/${inp.name + randomStringGen(12) }`);
     uploadBytes(imageRef, inp).then(() => {
       alert("img sent");
+      
     });
   };
-  
+
   return (
     <div>
       <div className="flex justify-between text-c-twenty">
@@ -95,7 +98,7 @@ const Signup = () => {
 
       <img
         onClick={() => fileInput.current.click()}
-        className={`cursor-pointer h-20 w-20 mt-4 transition-all duration-200 hover:opacity-70`}
+        className={`cursor-pointer h-20 w-20 mt-4 transition-all duration-200 hover:opacity-70 rounded-full`}
         src={userimg}
         alt="profieImage"
       />
