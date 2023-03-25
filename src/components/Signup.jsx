@@ -4,7 +4,7 @@ import userImg from "../user.png";
 //firebase
 import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { storage } from "../Firebase";
-import { ref, uploadBytes } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { auth } from "../Firebase";
 import { ErrorMsg } from "./ErrorMsg";
 
@@ -13,7 +13,6 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState({});
   const [errorMsg, setErrorMsg] = useState(false);
-  const [imagelist, setImageList] = useState([])
   const [userimg, setUserImg] = useState(userImg);
 
   const navigate = useNavigate();
@@ -41,29 +40,23 @@ const Signup = () => {
     });
   }, [user]);
 
-
-  //random string generate function
-  const randomStringGen  = length => {
-    let result = "";
-    const characters ="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let counter = 0;
-    while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
-      counter += 1;
-    }
-    return result;
-  }
-  
   // uploading image to firebase
-  const imageListRef = ref(storage, "images/")
+  
   const uploadImg = (inp) => {
     if (inp == null) return console.log("null");
     
-    const imageRef = ref(storage, `images/${inp.name + randomStringGen(12) }`);
+    const imageRef = ref(storage, `images/${email}`);
     uploadBytes(imageRef, inp).then(() => {
-      alert("img sent");
-      
-    });
+      alert("img sent")
+    })
+    .then(() => {
+      // Get the download URL
+      const starsRef = ref(storage, `images/${email}`);
+      getDownloadURL(starsRef)
+      .then((url) => {
+       setUserImg(url);
+      })
+    })
   };
 
   return (
@@ -81,7 +74,9 @@ const Signup = () => {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="example@gmail.com"
         className="input-field mt-3 w-2/4"
-        type="text"
+        type="email"
+        // pattern={`^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$`}
+        // title="Please enter a valid email"
       />
 
       <label className="block text-c-eighteen mt-8">Password</label>
@@ -98,7 +93,7 @@ const Signup = () => {
 
       <img
         onClick={() => fileInput.current.click()}
-        className={`cursor-pointer h-20 w-20 mt-4 transition-all duration-200 hover:opacity-70 rounded-full`}
+        className={`cursor-pointer h-20 w-20 mt-4 transition-all duration-200 hover:opacity-70 rounded-full object-cover`}
         src={userimg}
         alt="profieImage"
       />
@@ -106,7 +101,6 @@ const Signup = () => {
       <input
         onChange={ e => {
           if (e.target.files[0]) {
-            setUserImg(e.target.files[0])
             uploadImg(e.target.files[0])
         }}}
         className="invisible"
@@ -114,8 +108,6 @@ const Signup = () => {
         type="file"
         accept="image/*"
       />
-
-      {/* <button className="px-5 py-2 bg-blue" onClick={uploadImg}> upload file  </button> */}
 
       <button onClick={handleSubmit} className="block mt-4 py-2 px-12 text-white rounded-md bg-green hover:bg-opacity-70 transition-all duration-200"> Sign up </button>
 
