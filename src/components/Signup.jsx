@@ -9,17 +9,51 @@ import { auth } from "../Firebase";
 import { ErrorMsg } from "./ErrorMsg";
 
 const Signup = () => {
+  // for auth
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailErr, setEmailErr] = useState(false)
   const [passowrdErr,setPasswordErr] = useState(false)
   const [user, setUser] = useState({});
   const [errorMsg, setErrorMsg] = useState(false);
-  const [userimg, setUserImg] = useState(userImg);
-  const [selectedImg, setSelectedImg] = useState()
+  // image purposes
+  const [userimg, setUserImg] = useState(userImg); //the default photo + the selected photo 
+  const [selectedImg, setSelectedImg] = useState() // dk about this lmao
+  const [pfp, setPfp] = useState()
 
   const navigate = useNavigate();
   let fileInput = useRef();
+
+  // const imageHandler = (event) => {
+  //   var reader = new FileReader();
+
+  //   reader.onload =() => {
+
+  //     if(reader.readyState === 2){
+  //       const formData = new FormData()
+  //       formData.append('file', reader.result)
+  //       formData.append('upload_preset', 'hk7ixu95')
+  //       setUserImg(formData)
+  //     }
+  //   }
+
+  //   reader.readAsText(event);
+
+  // }
+
+  useEffect(() => {
+    if (pfp) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUserImg(reader.result);
+      };
+
+      reader.readAsDataURL(pfp);
+    } else {
+      setUserImg(userImg)
+    }
+
+  }, [pfp]);
 
   // uploading image to firebase
   const uploadImg = (inp) => {
@@ -117,7 +151,9 @@ const Signup = () => {
           onChange={ e => {
             if (e.target.files[0]) {
               setSelectedImg(e.target.files[0])
-          }}}
+              setPfp(e.target.files[0])              
+              }
+          }}
           className="invisible"
           ref={fileInput}
           type="file"
