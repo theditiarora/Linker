@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import userImg from "../user.png";
 //firebase
 import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { setDoc, doc } from "firebase/firestore";
+import { db } from "../Firebase";
 import { storage } from "../Firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { auth } from "../Firebase";
@@ -15,31 +17,27 @@ const Signup = () => {
   const [emailErr, setEmailErr] = useState(false)
   const [passowrdErr,setPasswordErr] = useState(false)
   const [user, setUser] = useState({});
+  const [data, setData] = useState([]);
   const [errorMsg, setErrorMsg] = useState(false);
   // image purposes
   const [userimg, setUserImg] = useState(userImg); //the default photo + the selected photo 
-  const [selectedImg, setSelectedImg] = useState() // dk about this lmao
+  const [selectedImg, setSelectedImg] = useState() // deals all selected image work and passing it to userimg
   const [pfp, setPfp] = useState()
 
   const navigate = useNavigate();
   let fileInput = useRef();
 
-  // const imageHandler = (event) => {
-  //   var reader = new FileReader();
-
-  //   reader.onload =() => {
-
-  //     if(reader.readyState === 2){
-  //       const formData = new FormData()
-  //       formData.append('file', reader.result)
-  //       formData.append('upload_preset', 'hk7ixu95')
-  //       setUserImg(formData)
-  //     }
-  //   }
-
-  //   reader.readAsText(event);
-
-  // }
+  //add user
+  const addDoc = async (du) => {
+    try {
+      await setDoc(doc(db, "users", du), {
+        email: email,
+      });
+      console.log("Document written with ID: ", du);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
 
   useEffect(() => {
     if (pfp) {
@@ -47,7 +45,6 @@ const Signup = () => {
       reader.onloadend = () => {
         setUserImg(reader.result);
       };
-
       reader.readAsDataURL(pfp);
     } else {
       setUserImg(userImg)
@@ -90,13 +87,14 @@ const Signup = () => {
         setPassword("");
         setErrorMsg(false);
         console.log(user);
+        addDoc(user.user.uid)
       } 
       catch (error) {
         setErrorMsg(true);
       }
   
       uploadImg(selectedImg)
-      // navigate("/addLink");
+      navigate("/addLink");
 
     }
   };
