@@ -12,6 +12,7 @@ import { ErrorMsg } from "./ErrorMsg";
 
 const Signup = () => {
   // for auth
+  const [signedin, setSignedin] = useState(false)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailErr, setEmailErr] = useState(false); //for errs
@@ -80,17 +81,15 @@ const Signup = () => {
     else if (password === "") setPasswordErr(true);
     else {
       try {
-        const user = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+        const user = await createUserWithEmailAndPassword(auth, email, password);
         setEmail("");
         setPassword("");
         setErrorMsg(false);
         console.log(user);
         addDoc(user.user.uid);
-      } catch (error) {
+        setSignedin(true)
+      } 
+      catch (error) {
         setErrorMsg(true);
       }
 

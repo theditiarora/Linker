@@ -28,6 +28,7 @@ function App() {
   return (
     <div className="min-h-screen w-screen text-white px-16 py-7">
       <RouterProvider router={router} />
+      
     </div>
   );
 }
