@@ -2,12 +2,9 @@ import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import userImg from "../user.png";
 //firebase
-import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
-import { db } from "../Firebase";
+import { db } from "../Firebase"; 
 import { storage } from "../Firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { auth } from "../Firebase";
@@ -17,10 +14,10 @@ const Signup = () => {
   // for auth
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailErr, setEmailErr] = useState(false);
-  const [passowrdErr, setPasswordErr] = useState(false);
-  const [user, setUser] = useState({});
-  const [data, setData] = useState([]);
+  const [emailErr, setEmailErr] = useState(false); //for errs
+  const [passowrdErr, setPasswordErr] = useState(false); //for errs
+  const [user, setUser] = useState({}); // current user
+  const [data, setData] = useState([]); // firestore db
   const [errorMsg, setErrorMsg] = useState(false);
   // image purposes
   const [userimg, setUserImg] = useState(userImg); //the default photo + the selected photo
@@ -98,7 +95,7 @@ const Signup = () => {
       }
 
       uploadImg(selectedImg);
-      navigate("/addLink");
+      // navigate("/addLink");
     }
   };
 
@@ -106,6 +103,7 @@ const Signup = () => {
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      setEmail(user.email)
     });
   }, [user]);
 
