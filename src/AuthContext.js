@@ -8,7 +8,7 @@ export const useAuth = () => {return useContext(UserContext)}
 export const AuthProvider = ({children}) => {
   const [signedin, setSignedin] = useState(false);
   const [email, setEmail] = useState("");
-  const [user, setUser] = useState('lol'); // current user
+  const [user, setUser] = useState(); // current user
   const [data, setData] = useState([]); // firestore db
   const [userimg, setUserImg] = useState(userImg); //the default photo + the selected photo
   
