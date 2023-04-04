@@ -24,6 +24,7 @@ const Signup = () => {
 
   const {email, setEmail, signedin, setSignedin, user, setUser, data, setData, userimg, setUserImg} = useAuth()
 
+  console.log(user);
   const navigate = useNavigate();
   let fileInput = useRef();
 
