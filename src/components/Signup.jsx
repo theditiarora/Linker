@@ -18,16 +18,11 @@ const Signup = () => {
   const [emailErr, setEmailErr] = useState(false); //for errs
   const [passowrdErr, setPasswordErr] = useState(false); //for errs
   const [errorMsg, setErrorMsg] = useState(false);
-  const [signedin, setSignedin] = useState(false);
-  const [email, setEmail] = useState("");
-  const [user, setUser] = useState({}); // current user
-  const [data, setData] = useState([]); // firestore db
-  const [userimg, setUserImg] = useState(userImg); //the default photo + the selected photo
   // image purposes
   const [selectedImg, setSelectedImg] = useState(); // deals all selected image work and passing it to userimg
   const [pfp, setPfp] = useState();
 
-
+  const {email, setEmail, signedin, setSignedin, user, setUser, data, setData, userimg, setUserImg} = useAuth()
 
   const navigate = useNavigate();
   let fileInput = useRef();
@@ -109,9 +104,6 @@ const Signup = () => {
       setEmail(user.email)
     });
   }, [user]);
-
-  const { userr } = useAuth()
-  console.log(userr);
 
   return (
     <div>
