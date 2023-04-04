@@ -1,7 +1,7 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import userImg from "../user.png";
 //firebase
+import { useAuth } from "../AuthContext";
 import { createUserWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import { db } from "../Firebase"; 
@@ -10,20 +10,24 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { auth } from "../Firebase";
 import { ErrorMsg } from "./ErrorMsg";
 
+import userImg from "../user.png";
+
 const Signup = () => {
   // for auth
-  const [signedin, setSignedin] = useState(false)
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailErr, setEmailErr] = useState(false); //for errs
   const [passowrdErr, setPasswordErr] = useState(false); //for errs
+  const [errorMsg, setErrorMsg] = useState(false);
+  const [signedin, setSignedin] = useState(false);
+  const [email, setEmail] = useState("");
   const [user, setUser] = useState({}); // current user
   const [data, setData] = useState([]); // firestore db
-  const [errorMsg, setErrorMsg] = useState(false);
-  // image purposes
   const [userimg, setUserImg] = useState(userImg); //the default photo + the selected photo
+  // image purposes
   const [selectedImg, setSelectedImg] = useState(); // deals all selected image work and passing it to userimg
   const [pfp, setPfp] = useState();
+
+
 
   const navigate = useNavigate();
   let fileInput = useRef();
@@ -105,6 +109,9 @@ const Signup = () => {
       setEmail(user.email)
     });
   }, [user]);
+
+  const { userr } = useAuth()
+  console.log(userr);
 
   return (
     <div>
