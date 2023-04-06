@@ -1,10 +1,8 @@
-import { useRef, useState, useEffect, useContext } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 //firebase
 import { useAuth } from "../AuthContext";
 import { createUserWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
-import { db } from "../Firebase"; 
 import { storage } from "../Firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { auth } from "../Firebase";
@@ -22,23 +20,11 @@ const Signup = () => {
   const [selectedImg, setSelectedImg] = useState(); // deals all selected image work and passing it to userimg
   const [pfp, setPfp] = useState();
 
-  const {email, setEmail, signedin, setSignedin, user, setUser, data, setData, userimg, setUserImg} = useAuth()
+  const {email, setEmail, user, setSignedin, setUser, userimg, setUserImg} = useAuth()
 
   console.log(user);
   const navigate = useNavigate();
   let fileInput = useRef();
-
-  //add user
-  const addDoc = async (du) => {
-    try {
-      await setDoc(doc(db, "users", du), {
-        email: email,
-      });
-      console.log("Document written with ID: ", du);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-  };
 
   useEffect(() => {
     if (pfp) {
@@ -86,7 +72,6 @@ const Signup = () => {
         setPassword("");
         setErrorMsg(false);
         console.log(user);
-        addDoc(user.user.uid);
         setSignedin(true)
       } 
       catch (error) {
@@ -94,7 +79,7 @@ const Signup = () => {
       }
 
       uploadImg(selectedImg);
-      // navigate("/addLink");
+      navigate("/addLink");
     }
   };
 

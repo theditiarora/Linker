@@ -1,7 +1,9 @@
-import React from 'react'
 import { useState } from "react";
 import Link from "./Link";
 import { useNavigate } from 'react-router-dom';
+import { setDoc, doc } from "firebase/firestore";
+import { db } from '../Firebase';
+import { useAuth } from "../AuthContext";
 
 const CreateLinkPage = () => {
   const navigate = useNavigate()
@@ -9,13 +11,26 @@ const CreateLinkPage = () => {
   const [title, setTitle] = useState("");
   const [links, setLinks] = useState([]);
 
+  const {user} = useAuth()
+
+  const addDoc = async (du) => {
+    try {
+      await setDoc(doc(db, "user", du), {
+        link: links,
+      });
+      console.log("Document written with ID: ", du);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
 
   const addNewLink = () => {
     const id = Math.floor(Math.random() * 1000) + 1
     const newLink = {id, url, title };
     setLinks([...links, newLink]);
+    addDoc(user.uid)
     setUrl("");
-    setTitle("");
+    setTitle("")
   };
 
   const deleteLink = id => {
