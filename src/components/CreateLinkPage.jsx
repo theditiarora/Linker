@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "./Link";
 import { useNavigate } from 'react-router-dom';
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, getDoc } from "firebase/firestore";
 import { db } from '../Firebase';
 import { useAuth } from "../AuthContext";
 
@@ -11,7 +11,7 @@ const CreateLinkPage = () => {
   const [title, setTitle] = useState("");
   const [links, setLinks] = useState([]);
 
-  const {user} = useAuth()
+  const {user, data, setData} = useAuth()
 
   const addDoc = async (du) => {
     try {
@@ -23,6 +23,18 @@ const CreateLinkPage = () => {
       console.error("Error adding document: ", e);
     }
   };
+
+  const getData = async () => {
+    const docRef = doc(db, "users", user.uid);
+
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      setData(docSnap.data())
+    } else {
+      console.log("No such document!");
+    }
+    console.log(data)
+  }
 
   const addNewLink = () => {
     const id = Math.floor(Math.random() * 1000) + 1
@@ -64,6 +76,8 @@ const CreateLinkPage = () => {
           <button onClick={addNewLink} className="bg-green hover:bg-opacity-70 duration-200 py-3 px-7 text-white ml-5 rounded-md whitespace-nowrap" >Save link </button>
         </div>
       </div>
+
+      <button onClick={getData} className="bg-blue p-5">hi</button>
 
       <h1 className="text-c-twenty mt-10">Saved Links</h1>
 
