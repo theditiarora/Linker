@@ -13,37 +13,42 @@ const CreateLinkPage = () => {
 
   const {user, data, setData} = useAuth()
 
-  const addDoc = async (du) => {
-    try {
-      await setDoc(doc(db, "user", du), {
-        link: links,
-      });
-      console.log("Document written with ID: ", du);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-  };
+
 
   const getData = async () => {
     const docRef = doc(db, "users", user.uid);
 
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      setData(docSnap.data())
+     console.log(docSnap.data())
     } else {
       console.log("No such document!");
     }
-    console.log(data)
   }
 
   const addNewLink = () => {
     const id = Math.floor(Math.random() * 1000) + 1
     const newLink = {id, url, title };
     setLinks([...links, newLink]);
-    addDoc(user.uid)
     setUrl("");
     setTitle("")
   };
+
+  useEffect(() => {
+    const addDoc = async (du) => {
+      console.log(links)
+      try {
+        await setDoc(doc(db, "user", du), {
+          link: links,
+        });
+        console.log("Document written with ID: ", du);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    };
+
+    addDoc(user.uid)
+  }, [links, user.uid])
 
   const deleteLink = id => {
     setLinks(links.filter(task => task.id !== id))

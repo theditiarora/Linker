@@ -22,7 +22,6 @@ const Signup = () => {
 
   const {email, setEmail, user, setSignedin, setUser, userimg, setUserImg} = useAuth()
 
-  console.log(user);
   const navigate = useNavigate();
   let fileInput = useRef();
 
@@ -103,13 +102,12 @@ const Signup = () => {
 
       {errorMsg && <ErrorMsg />}
 
-      <form action="">
+      <form>
         <label
           className={`block text-c-eighteen ${
             errorMsg === true ? "mt-4" : "mt-12"
           } }`}
         >
-           
           Email Address
         </label>
         <input
