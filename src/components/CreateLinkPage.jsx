@@ -13,18 +13,24 @@ const CreateLinkPage = () => {
 
   const {user, data, setData} = useAuth()
 
+  useEffect(() => {
+    const getData = async () => {
+      const docRef = doc(db, "user", user.uid);
+  
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+       setData(docSnap.data().link)
 
-
-  const getData = async () => {
-    const docRef = doc(db, "users", user.uid);
-
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-     console.log(docSnap.data())
-    } else {
-      console.log("No such document!");
+       if(docSnap.data().link.length === 0) {
+        console.log("lenght is 0 man");
+       }
+      } 
+      else {
+        console.log("No such document!");
+      }
     }
-  }
+    getData()
+  }, [])
 
   const addNewLink = () => {
     const id = Math.floor(Math.random() * 1000) + 1
@@ -82,7 +88,7 @@ const CreateLinkPage = () => {
         </div>
       </div>
 
-      <button onClick={getData} className="bg-blue p-5">hi</button>
+      {/* <button onClick={getData} className="bg-blue p-5">hi</button> */}
 
       <h1 className="text-c-twenty mt-10">Saved Links</h1>
 
