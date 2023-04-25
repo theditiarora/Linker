@@ -95,7 +95,6 @@ const CreateLinkPage = () => {
       </div>
 
       <h1 className="text-c-twenty mt-10">Saved Links</h1>
-
       {links.map((link) => (
         <Link onDelete={deleteLink} links={link} />
       ))}
